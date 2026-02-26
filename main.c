@@ -71,6 +71,9 @@ int main()
     printf("Failed to create buffer");
   }
 
+  buffer_load_from_file(buf, "test.c");
+  render(buf);
+
   int running = 1;
   char c;
   while(read(STDIN_FILENO, &c, 1) == 1 && running){

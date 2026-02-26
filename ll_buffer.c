@@ -234,6 +234,8 @@ void buffer_load_from_file(Buffer *buf, const char *filename)
   FILE *fp = fopen(filename, "r");
   if(!fp)return;
 
+  int first_line = (buf->line_count == 1 && buf->head->len == 0);
+
   char temp_buffer[1024];
   while(fgets(temp_buffer, sizeof(temp_buffer), fp)){
     size_t len = strlen(temp_buffer);
@@ -241,8 +243,23 @@ void buffer_load_from_file(Buffer *buf, const char *filename)
       temp_buffer[len - 1] = '\0';
       len--;
     }
-    buffer_new_line(buf, temp_buffer, len);
+
+    if(first_line){
+      if(len >= buf->head->capacity) {
+        buf->head->capacity = len + 1;
+        buf->head->data = realloc(buf->head->data, buf->head->capacity);
+      }
+      memcpy(buf->head->data, temp_buffer, len);
+      buf->head->len = len;
+      first_line = 0;
+    }else{
+      buffer_new_line(buf, temp_buffer, len);
+    }
   }
+
+  buf->cursor_line = buf->head;
+  buf->cursor_row = 0;
+  buf->cursor_col = 0;
 }
 
 
