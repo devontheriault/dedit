@@ -87,7 +87,7 @@ int main()
   rest_term(&default_term);
   hmscr();
 
-  printf("%s\n", buf->tail->data);
+  printf("%d\n", buf->cursor_row);
 
   return 0;
 }

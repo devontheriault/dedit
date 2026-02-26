@@ -19,9 +19,6 @@ void render(Buffer *buf)
     printf("%.*s\n", (int)current->len, current->data);
     current = current->next;
   }
-
-  // [J -- This erases from the cursor position to the end of the display
-  fputs("\x1b[J", stdout);
   
   // [?25h -- This shows the cursor
   printf("\x1b[%d;%dH\x1b[?25h", buf->cursor_row + 1, buf->cursor_col + 1);

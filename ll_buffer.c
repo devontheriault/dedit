@@ -97,11 +97,16 @@ void buffer_new_line(Buffer *buf)
   line->len = 0;
   line->capacity = 16;
   line->prev = current_line;
-  line->next = NULL;
+
+  if(current_line == buf->tail){
+    buf->tail = line;
+    line->next = NULL;
+  }else{
+    line->next = current_line->next;
+  }
 
   current_line->next = line;
 
-  buf->tail = line;
   buf->line_count++;
   buf->cursor_line = line;
   buf->cursor_row++;
@@ -110,12 +115,28 @@ void buffer_new_line(Buffer *buf)
 
 void buffer_move_cursor_up(Buffer *buf)
 {
+  if(buf->cursor_line == buf->head) return;
+  
+  buf->cursor_line = buf->cursor_line->prev;
+  
+  if(buf->cursor_line->len < buf->cursor_col){
+    buf->cursor_col = buf->cursor_line->len;
+  }
 
+  buf->cursor_row--;
 }
 
 void buffer_move_cursor_down(Buffer *buf)
 {
+  if(buf->cursor_line == buf->tail)return;
 
+  buf->cursor_line = buf->cursor_line->next;
+
+  if(buf->cursor_line->len < buf->cursor_col){
+     buf->cursor_col = buf->cursor_line->len;
+  }
+
+  buf->cursor_row++;
 }
 
 void buffer_move_cursor_right(Buffer *buf)

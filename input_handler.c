@@ -17,12 +17,16 @@ int handle_input(Buffer *buf, char c)
       if(seq[0] == '['){
         switch(seq[1]){
           case 'A': //Up Arrow
+            buffer_move_cursor_up(buf); 
             break;
           case 'B': //Down Arrow
+            buffer_move_cursor_down(buf); 
             break;
           case 'C': //Right Arrow
+            buffer_move_cursor_right(buf); 
             break;
           case 'D': //Left Arrow
+            buffer_move_cursor_left(buf); 
             break;
         }
       }
