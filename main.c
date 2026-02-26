@@ -7,13 +7,8 @@
 #include "input_handler.h"
 
 // TODO: Handle deleting a line when there is data on the current line
-// Handle moving around the screen with arrow keys
-//
-// NOTE: Maybe I'll just start with a linked list to keep things simple.
-// I'm going to be building a line by line editor, then I just have to deal
-// with in line edits and change the pointers. This should be fine for now
-// This is most likely how I'm to do any text handling behind the scenes 
-// and without it I shouldn't start grappling with any text display logic
+// Handle hitting enter when there's data after the cursor
+// Handle entering text into the middle of a string without overwritting
 
 void clrscr() 
 {

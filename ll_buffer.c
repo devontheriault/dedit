@@ -68,6 +68,12 @@ void buffer_insert_char(Buffer *buf, char c)
   if(current_line->len >= current_line->capacity){
     buffer_increase_capacity(buf);
   }
+
+  if(buf->cursor_col < current_line->len){
+    for(int i = (int)current_line->len; i >= buf->cursor_col; i--){
+      current_line->data[i + 1] = current_line->data[i];  
+    }
+  }
   current_line->data[buf->cursor_col] = c;
   buf->cursor_col++;
   current_line->len++;
