@@ -84,6 +84,7 @@ void buffer_delete_char(Buffer *buf)
     }
     buf->cursor_col--;
     current_line->len--;
+    buf->line_count--;
     current_line->data[current_line->len] = '\0';
   }
 }
@@ -103,6 +104,7 @@ void buffer_new_line(Buffer *buf)
     line->next = NULL;
   }else{
     line->next = current_line->next;
+    line->next->prev = line;
   }
 
   current_line->next = line;
