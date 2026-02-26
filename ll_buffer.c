@@ -32,9 +32,13 @@ void buffer_increase_capacity(Buffer *buf)
   line->data = realloc(line->data, line->capacity);
 }
 
-void buffer_concat_lines(Buffer *buf)
+void buffer_concat_lines(Buffer *buf, Line *line1, Line *line2)
 {
-
+  buf->cursor_col = line1->len;
+  buf->cursor_line = line1;
+  for(int i = 0; i < line2->len; i++){
+    buffer_insert_char(buf, line2->data[i]);
+  }
 }
 
 void free_line(Line *line)
@@ -51,6 +55,10 @@ void buffer_delete_line(Buffer *buf)
 
   Line *next = current_line->next;
   Line *prev = current_line->prev;
+
+  if(current_line->len){
+    buffer_concat_lines(buf, prev, current_line);
+  }
 
   if(prev) prev->next = next;
   if(next) next->prev = prev;
@@ -76,6 +84,7 @@ void buffer_insert_char(Buffer *buf, char c)
             &current_line->data[buf->cursor_col],
             current_line->len - buf->cursor_col);
   }
+
   current_line->data[buf->cursor_col] = c;
   buf->cursor_col++;
   current_line->len++;
@@ -86,6 +95,7 @@ void buffer_delete_char(Buffer *buf)
   Line *current_line = buf->cursor_line;
   if(current_line->len == 0 || buf->cursor_col == 0){
     buffer_delete_line(buf);
+
     return;
   } else{
     memmove(&current_line->data[buf->cursor_col - 1],

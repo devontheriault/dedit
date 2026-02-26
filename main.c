@@ -8,7 +8,6 @@
 
 // TODO: Handle deleting a line when there is data on the current line
 // Handle hitting enter when there's data after the cursor
-// Handle entering text into the middle of a string without overwritting
 
 void clrscr() 
 {
