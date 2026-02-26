@@ -55,6 +55,7 @@ void buffer_delete_line(Buffer *buf)
 
   Line *next = current_line->next;
   Line *prev = current_line->prev;
+  size_t prev_len = prev->len;
 
   if(current_line->len){
     buffer_concat_lines(buf, prev, current_line);
@@ -66,7 +67,7 @@ void buffer_delete_line(Buffer *buf)
   
   buf->cursor_line = prev;
   buf->cursor_row--;
-  buf->cursor_col = prev->len;
+  buf->cursor_col = prev_len;
   buf->line_count--;
     
   free_line(current_line);
@@ -111,18 +112,32 @@ void buffer_delete_char(Buffer *buf)
 void buffer_new_line(Buffer *buf)
 {
   Line *current_line = buf->cursor_line;
+  int chars_to_move = current_line->len - buf->cursor_col;
+  int capacity = chars_to_move > 16 ? chars_to_move : 16;
 
   Line *line = malloc(sizeof(Line));
-  line->data = malloc(16);
-  line->len = 0;
-  line->capacity = 16;
+  line->data = malloc(capacity);
+  line->len = chars_to_move;
+  line->capacity = capacity;
+  line->prev = current_line;
+
+  if(chars_to_move){
+    memcpy(line->data, 
+           &current_line->data[buf->cursor_col], 
+           chars_to_move);
+  }
+
+  current_line->len = buf->cursor_col;
+  if(current_line->len < current_line->capacity){
+    current_line->data[current_line->len] = '\0';
+  }
+
+  line->next = current_line->next;
   line->prev = current_line;
 
   if(current_line == buf->tail){
     buf->tail = line;
-    line->next = NULL;
   }else{
-    line->next = current_line->next;
     line->next->prev = line;
   }
 

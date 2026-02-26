@@ -6,9 +6,6 @@
 #include "renderer.h"
 #include "input_handler.h"
 
-// TODO: Handle deleting a line when there is data on the current line
-// Handle hitting enter when there's data after the cursor
-
 void clrscr() 
 {
   // \x1b -- Escape code
