@@ -35,7 +35,7 @@ int handle_input(Buffer *buf, char c)
       return 0;
     case '\n':
     case '\r':
-      buffer_new_line(buf);
+      buffer_new_line(buf, NULL, 0);
       break;
     case DEL:
     case BKSPC:

@@ -26,9 +26,11 @@ typedef struct Buffer {
 Buffer *buffer_create(void);
 void buffer_insert_char(Buffer *buf, char c);
 void buffer_delete_char(Buffer *buf);
-void buffer_new_line(Buffer *buf);
+void buffer_new_line(Buffer *buf, const char *text, int len);
 void buffer_move_cursor_up(Buffer *buf);
 void buffer_move_cursor_down(Buffer *buf);
 void buffer_move_cursor_right(Buffer *buf);
 void buffer_move_cursor_left(Buffer *buf);
+void buffer_to_file(Buffer *buf, const char *filename);
+void buffer_load_from_file(Buffer *buf, const char *filename);
 #endif // !fndef LL_BUFFER_H

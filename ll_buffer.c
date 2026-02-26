@@ -109,12 +109,20 @@ void buffer_delete_char(Buffer *buf)
   }
 }
 
-void buffer_new_line(Buffer *buf)
+void buffer_new_line(Buffer *buf, const char *text, int len)
 {
   Line *current_line = buf->cursor_line;
-  int chars_to_move = current_line->len - buf->cursor_col;
-  int capacity = chars_to_move > 16 ? chars_to_move : 16;
+  const char *data = text;
 
+  int chars_to_move = 0;
+  if(!text){
+    data = &current_line->data[buf->cursor_col];
+    chars_to_move = current_line->len - buf->cursor_col;
+  }else{
+    chars_to_move = len;
+  } 
+  int capacity = chars_to_move > 16 ? chars_to_move : 16;
+  
   Line *line = malloc(sizeof(Line));
   line->data = malloc(capacity);
   line->len = chars_to_move;
@@ -123,11 +131,14 @@ void buffer_new_line(Buffer *buf)
 
   if(chars_to_move){
     memcpy(line->data, 
-           &current_line->data[buf->cursor_col], 
+           data, 
            chars_to_move);
   }
 
-  current_line->len = buf->cursor_col;
+  if(!text){
+    current_line->len = buf->cursor_col;
+  }
+
   if(current_line->len < current_line->capacity){
     current_line->data[current_line->len] = '\0';
   }
@@ -201,3 +212,37 @@ void buffer_move_cursor_left(Buffer *buf)
   }
 
 }
+
+void buffer_to_file(Buffer *buf, const char *filename)
+{
+  FILE *fp = fopen(filename, "w");
+  if(!fp) return;
+
+  Line *current = buf->head;
+  while(current){
+    fwrite(current->data, 1, current->len, fp);
+    fputc('\n', fp);
+
+    current = current->next;
+  }
+
+  fclose(fp);
+}
+
+void buffer_load_from_file(Buffer *buf, const char *filename)
+{
+  FILE *fp = fopen(filename, "r");
+  if(!fp)return;
+
+  char temp_buffer[1024];
+  while(fgets(temp_buffer, sizeof(temp_buffer), fp)){
+    size_t len = strlen(temp_buffer);
+    if(len > 0 && temp_buffer[len - 1] == '\n'){
+      temp_buffer[len - 1] = '\0';
+      len--;
+    }
+    buffer_new_line(buf, temp_buffer, len);
+  }
+}
+
+
