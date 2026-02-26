@@ -45,22 +45,23 @@ void free_line(Line *line)
 
 void buffer_delete_line(Buffer *buf)
 {
+  
   Line *current_line = buf->cursor_line;
-  Line *next = current_line->next;
-  if(current_line->len > 0 && current_line->prev != NULL){
-    buffer_concat_lines(buf);
-  } else if(current_line->prev != NULL){
+  if(current_line == buf->head)return;
 
-    buf->line_count--;
-    buf->cursor_row--;
-    buf->cursor_line->prev->next = next;
-    if(buf->cursor_line == buf->tail){
-      buf->tail = buf->cursor_line->prev;
-    }
-    free(buf->cursor_line);
-    buf->cursor_line = current_line->prev;
-    buf->cursor_col = buf->cursor_line->len;
-  }
+  Line *next = current_line->next;
+  Line *prev = current_line->prev;
+
+  if(prev) prev->next = next;
+  if(next) next->prev = prev;
+  if(buf->tail == current_line) buf->tail = prev;
+  
+  buf->cursor_line = prev;
+  buf->cursor_row--;
+  buf->cursor_col = prev->len;
+  buf->line_count--;
+    
+  free_line(current_line);
 }
 
 void buffer_insert_char(Buffer *buf, char c)
@@ -85,13 +86,14 @@ void buffer_delete_char(Buffer *buf)
   Line *current_line = buf->cursor_line;
   if(current_line->len == 0 || buf->cursor_col == 0){
     buffer_delete_line(buf);
+    return;
   } else{
     memmove(&current_line->data[buf->cursor_col - 1],
             &current_line->data[buf->cursor_col],
             current_line->len - buf->cursor_col);
     buf->cursor_col--;
     current_line->len--;
-    buf->line_count--;
+    //buf->line_count--;
     current_line->data[current_line->len] = '\0';
   }
 }

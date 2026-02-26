@@ -82,7 +82,7 @@ int main()
   rest_term(&default_term);
   hmscr();
 
-  printf("%d: %s\n", buf->cursor_row, buf->cursor_line->data);
+  printf("%d: %s | %s\n", buf->cursor_row, buf->head->data, buf->tail->data);
 
   return 0;
 }
