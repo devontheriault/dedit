@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "ll_buffer.h"
 
@@ -65,14 +66,14 @@ void buffer_delete_line(Buffer *buf)
 void buffer_insert_char(Buffer *buf, char c)
 {
   Line *current_line = buf->cursor_line;
-  if(current_line->len >= current_line->capacity){
+  if(current_line->len > current_line->capacity){
     buffer_increase_capacity(buf);
   }
 
   if(buf->cursor_col < current_line->len){
-    for(int i = (int)current_line->len; i >= buf->cursor_col; i--){
-      current_line->data[i + 1] = current_line->data[i];  
-    }
+    memmove(&current_line->data[buf->cursor_col + 1],
+            &current_line->data[buf->cursor_col],
+            current_line->len - buf->cursor_col);
   }
   current_line->data[buf->cursor_col] = c;
   buf->cursor_col++;
@@ -85,9 +86,9 @@ void buffer_delete_char(Buffer *buf)
   if(current_line->len == 0 || buf->cursor_col == 0){
     buffer_delete_line(buf);
   } else{
-    for(int i = (int)buf->cursor_col; i < current_line->len - 1; i++){
-      current_line->data[i] = current_line->data[i + 1];
-    }
+    memmove(&current_line->data[buf->cursor_col - 1],
+            &current_line->data[buf->cursor_col],
+            current_line->len - buf->cursor_col);
     buf->cursor_col--;
     current_line->len--;
     buf->line_count--;
