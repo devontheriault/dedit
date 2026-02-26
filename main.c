@@ -8,7 +8,6 @@
 
 // TODO: Handle deleting a line when there is data on the current line
 // Handle moving around the screen with arrow keys
-// FIX THE UP AND DOWN ARROWS - CURRENTLY SHIFTS ROWS DOWN??
 //
 // NOTE: Maybe I'll just start with a linked list to keep things simple.
 // I'm going to be building a line by line editor, then I just have to deal
