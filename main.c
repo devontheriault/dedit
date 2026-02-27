@@ -7,7 +7,8 @@
 #include "input_handler.h"
 #include "window.h"
 
-//TODO: It's time to move onto proper window rendering
+//TODO: Add a status bar
+//NOTE: All the main jobs of a text editor are done!
 
 void clrscr() 
 {

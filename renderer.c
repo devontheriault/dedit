@@ -2,10 +2,6 @@
 
 #include "renderer.h"
 
-//TODO: I'm only rendering what can fit into the current window
-// but you can't navigate any code that exceedes the width/height 
-// of the window
-
 //NOTE: If I wanted this to be completely correct I would need to change
 // the window size whenever a signal is sent... not just when a user types
 
@@ -17,7 +13,7 @@ void render(Buffer *buf, Window *win)
   // [?25l -- This hides the cursor     
   // [H -- This moves the cursor to pos 1 1
   fputs("\x1b[?25l\x1b[H", stdout);
-  //TODO: Stop clearing full screen and only clear what's needed
+  //NOTE: Stop clearing full screen and only clear what's needed
   fputs("\x1b[2J", stdout);
   
   Line *current = buf->head;
