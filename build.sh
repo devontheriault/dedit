@@ -4,4 +4,5 @@ gcc main.c \
     ll_buffer.c \
     renderer.c \
     input_handler.c \
+    window.c\
     -o editor

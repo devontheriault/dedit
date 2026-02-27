@@ -5,10 +5,9 @@
 #include "ll_buffer.h"
 #include "renderer.h"
 #include "input_handler.h"
+#include "window.h"
 
 //TODO: It's time to move onto proper window rendering
-// Choose the file to open
-// Add CTRL-S to save the file
 
 void clrscr() 
 {
@@ -78,6 +77,9 @@ int main(int argc, char *argv[])
     buffer_load_from_file(buf, filename);
   }
 
+  Window *win;
+  get_terminal_size(win);
+
   render(buf);
 
   int running = 1;
@@ -92,7 +94,7 @@ int main(int argc, char *argv[])
   rest_term(&default_term);
   hmscr();
 
-  printf("%d: %s | %s\n", buf->cursor_row, buf->head->data, buf->tail->data);
+  printf("%d: %d\n", win->height, win->width);
 
   return 0;
 }
