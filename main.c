@@ -78,6 +78,8 @@ int main(int argc, char *argv[])
   }
 
   Window *win;
+  win->hoffset = 0;
+  win->woffset = 0;
 
   render(buf, win);
 

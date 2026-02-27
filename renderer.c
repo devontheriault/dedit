@@ -2,9 +2,9 @@
 
 #include "renderer.h"
 
-//TODO: Right now I'm rendering everything no matter what which causes
-// some issues when you start exceeding view width/height.
-// I should only render what can fit into the display window.
+//TODO: I'm only rendering what can fit into the current window
+// but you can't navigate any code that exceedes the width/height 
+// of the window
 
 //NOTE: If I wanted this to be completely correct I would need to change
 // the window size whenever a signal is sent... not just when a user types
@@ -21,19 +21,33 @@ void render(Buffer *buf, Window *win)
   
   Line *current = buf->head;
   int i = 1;
+  
+  if(buf->cursor_row < win->hoffset){
+    win->hoffset = buf->cursor_row;
+  }else if(buf->cursor_row >= win->hoffset + win->height){
+    win->hoffset = buf->cursor_row - win->height + 1;
+  }
+
   while(current != NULL){
-    if(i < win->height){
-      printf("%.*s\n", win->width, current->data);
-      //printf("%.*s\n", (int)current->len, current->data);
-    }else{
+    if(i < win->hoffset){
+      current = current->next;
+      i++;
+      continue;
+    }
+
+    if(i >= win->hoffset + win->height){
       break;
     }
+    
+    printf("%.*s\n", win->width, current->data);
 
     current = current->next;
     i++;
   }
   
   // [?25h -- This shows the cursor
-  printf("\x1b[%d;%dH\x1b[?25h", buf->cursor_row + 1, buf->cursor_col + 1);
+  printf("\x1b[%d;%dH\x1b[?25h", 
+         (buf->cursor_row - win->hoffset) + 1, 
+         buf->cursor_col + 1);
   fflush(stdout);
 }
