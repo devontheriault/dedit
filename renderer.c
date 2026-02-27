@@ -6,8 +6,10 @@
 // some issues when you start exceeding view width/height.
 // I should only render what can fit into the display window.
 
-void render(Buffer *buf)
+void render(Buffer *buf, Window *win)
 {
+  get_terminal_size(win);
+
   // [?25l -- This hides the cursor     
   // [H -- This moves the cursor to pos 1 1
   fputs("\x1b[?25l\x1b[H", stdout);

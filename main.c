@@ -78,9 +78,8 @@ int main(int argc, char *argv[])
   }
 
   Window *win;
-  get_terminal_size(win);
 
-  render(buf);
+  render(buf, win);
 
   int running = 1;
   char c;
@@ -88,7 +87,7 @@ int main(int argc, char *argv[])
     running = handle_input(buf, c);
     if(!running) break;
 
-    render(buf);
+    render(buf, win);
   }
 
   rest_term(&default_term);
