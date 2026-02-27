@@ -35,11 +35,15 @@ void render(Buffer *buf, Window *win)
       continue;
     }
 
-    if(i >= win->hoffset + win->height){
+    if(i > win->hoffset + win->height){
       break;
     }
     
-    printf("%.*s\n", win->width, current->data);
+    if(i == win->hoffset + win->height){
+      printf("%.*s\n", win->width, current->data);
+    }else{
+      printf("%.*s\n", win->width, current->data);
+    }
 
     current = current->next;
     i++;

@@ -78,6 +78,8 @@ int main(int argc, char *argv[])
   }
 
   Window *win;
+  win->hoffset = 0;
+  win->woffset = 0;
 
   render(buf, win);
 
@@ -96,4 +98,4 @@ int main(int argc, char *argv[])
   printf("%d: %d\n", win->height, win->width);
 
   return 0;
-1ad}a test with more data
+}
