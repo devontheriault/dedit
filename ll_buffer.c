@@ -215,6 +215,7 @@ void buffer_move_cursor_left(Buffer *buf)
 
 void buffer_to_file(Buffer *buf)
 {
+  if(!buf->filename)return;
   FILE *fp = fopen(buf->filename, "w");
   if(!fp) return;
 

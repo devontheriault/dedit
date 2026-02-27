@@ -55,7 +55,7 @@ void rest_term(struct termios *t)
   tcsetattr(STDIN_FILENO, TCSANOW, t);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
   altscr();
   clrscr();
@@ -68,10 +68,16 @@ int main()
   Buffer *buf = buffer_create();
   if(!buf){
     printf("Failed to create buffer");
+    return 1;
+  }
+  buf->filename = NULL;
+
+  if(argc >= 2){
+    char *filename = argv[1];
+    buf->filename = filename;
+    buffer_load_from_file(buf, filename);
   }
 
-  buffer_load_from_file(buf, "test.c");
-  buf->filename = "test.c";
   render(buf);
 
   int running = 1;
