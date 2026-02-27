@@ -13,6 +13,8 @@ typedef struct Line {
 } Line;
 
 typedef struct Buffer {
+  char *filename;
+
   Line *head;
   Line *tail;
 
@@ -31,6 +33,6 @@ void buffer_move_cursor_up(Buffer *buf);
 void buffer_move_cursor_down(Buffer *buf);
 void buffer_move_cursor_right(Buffer *buf);
 void buffer_move_cursor_left(Buffer *buf);
-void buffer_to_file(Buffer *buf, const char *filename);
+void buffer_to_file(Buffer *buf);
 void buffer_load_from_file(Buffer *buf, const char *filename);
 #endif // !fndef LL_BUFFER_H

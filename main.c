@@ -6,10 +6,9 @@
 #include "renderer.h"
 #include "input_handler.h"
 
-//TODO: I think I want to start handling fileIO now.
-//  I need to be able to open a text file with my current editor
-//  I need to be able to save a file with my current editor
-//  Then it's time to move onto proper window rendering
+//TODO: It's time to move onto proper window rendering
+// Choose the file to open
+// Add CTRL-S to save the file
 
 void clrscr() 
 {
@@ -72,6 +71,7 @@ int main()
   }
 
   buffer_load_from_file(buf, "test.c");
+  buf->filename = "test.c";
   render(buf);
 
   int running = 1;
@@ -86,7 +86,6 @@ int main()
   rest_term(&default_term);
   hmscr();
 
-  buffer_to_file(buf, "test.c");
   printf("%d: %s | %s\n", buf->cursor_row, buf->head->data, buf->tail->data);
 
   return 0;

@@ -3,6 +3,7 @@
 #include "input_handler.h"
 
 #define CTRL_Q 17
+#define CTRL_S 19
 #define BKSPC 8
 #define DEL 127
 
@@ -33,6 +34,9 @@ int handle_input(Buffer *buf, char c)
       break;
     case CTRL_Q: //Quit
       return 0;
+    case CTRL_S:
+      buffer_to_file(buf);
+      break;
     case '\n':
     case '\r':
       buffer_new_line(buf, NULL, 0);

@@ -213,9 +213,9 @@ void buffer_move_cursor_left(Buffer *buf)
 
 }
 
-void buffer_to_file(Buffer *buf, const char *filename)
+void buffer_to_file(Buffer *buf)
 {
-  FILE *fp = fopen(filename, "w");
+  FILE *fp = fopen(buf->filename, "w");
   if(!fp) return;
 
   Line *current = buf->head;
