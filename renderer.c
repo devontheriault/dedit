@@ -6,6 +6,9 @@
 // some issues when you start exceeding view width/height.
 // I should only render what can fit into the display window.
 
+//NOTE: If I wanted this to be completely correct I would need to change
+// the window size whenever a signal is sent... not just when a user types
+
 void render(Buffer *buf, Window *win)
 {
   get_terminal_size(win);
@@ -17,9 +20,17 @@ void render(Buffer *buf, Window *win)
   fputs("\x1b[2J", stdout);
   
   Line *current = buf->head;
+  int i = 1;
   while(current != NULL){
-    printf("%.*s\n", (int)current->len, current->data);
+    if(i < win->height){
+      printf("%.*s\n", win->width, current->data);
+      //printf("%.*s\n", (int)current->len, current->data);
+    }else{
+      break;
+    }
+
     current = current->next;
+    i++;
   }
   
   // [?25h -- This shows the cursor
