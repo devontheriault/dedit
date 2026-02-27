@@ -9,6 +9,7 @@
 //NOTE: If I wanted this to be completely correct I would need to change
 // the window size whenever a signal is sent... not just when a user types
 
+//NOTE: I should probably break up this function soon
 void render(Buffer *buf, Window *win)
 {
   get_terminal_size(win);
@@ -28,6 +29,16 @@ void render(Buffer *buf, Window *win)
     win->hoffset = buf->cursor_row - win->height + 1;
   }
 
+  int left_padding = 4;
+  if (buf->cursor_col < win->woffset + left_padding) {
+    win->woffset = buf->cursor_col - left_padding;
+  } 
+  else if (buf->cursor_col >= win->woffset + win->width) {
+    win->woffset = buf->cursor_col - win->width + 1;
+  }
+
+  if(win->woffset < 0) win->woffset = 0;
+
   while(current != NULL){
     if(i < win->hoffset){
       current = current->next;
@@ -39,10 +50,10 @@ void render(Buffer *buf, Window *win)
       break;
     }
     
-    if(i == win->hoffset + win->height){
-      printf("%.*s\n", win->width, current->data);
+    if(win->woffset > current->len){
+      printf("\n");
     }else{
-      printf("%.*s\n", win->width, current->data);
+      printf("%.*s\n", win->width, &current->data[win->woffset]);
     }
 
     current = current->next;
@@ -52,6 +63,6 @@ void render(Buffer *buf, Window *win)
   // [?25h -- This shows the cursor
   printf("\x1b[%d;%dH\x1b[?25h", 
          (buf->cursor_row - win->hoffset) + 1, 
-         buf->cursor_col + 1);
+         (buf->cursor_col - win->woffset) + 1);
   fflush(stdout);
 }

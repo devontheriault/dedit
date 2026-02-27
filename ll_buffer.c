@@ -192,9 +192,7 @@ void buffer_move_cursor_right(Buffer *buf)
     buf->cursor_col == buf->cursor_line->len)return;
   
   if(buf->cursor_col == buf->cursor_line->len){
-    buf->cursor_col = 0;
-    buf->cursor_line = buf->cursor_line->next;
-    buf->cursor_row++;
+    return;
   }else{
     buf->cursor_col++;
   }
@@ -204,9 +202,7 @@ void buffer_move_cursor_left(Buffer *buf)
 {
   if(buf->cursor_line == buf->head && buf->cursor_col == 0)return;
   if(buf->cursor_col == 0){
-    buf->cursor_line = buf->cursor_line->prev;
-    buf->cursor_col = buf->cursor_line->len;
-    buf->cursor_row--;
+    return;
   }else{
     buf->cursor_col--;
   }

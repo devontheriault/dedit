@@ -8,6 +8,7 @@
 #include "window.h"
 
 //TODO: It's time to move onto proper window rendering
+######################################################################################################################dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafffffffffffffffff
 
 void clrscr() 
 {
