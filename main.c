@@ -96,7 +96,5 @@ int main(int argc, char *argv[])
   rest_term(&default_term);
   hmscr();
 
-  printf("%d: %d\n", win->height, win->width);
-
   return 0;
 }
