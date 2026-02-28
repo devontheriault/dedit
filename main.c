@@ -8,6 +8,7 @@
 #include "window.h"
 
 //TODO: Add a status bar
+
 //NOTE: All the main jobs of a text editor are done!
 
 void clrscr() 

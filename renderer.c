@@ -16,9 +16,7 @@ void render(Buffer *buf, Window *win)
   //NOTE: Stop clearing full screen and only clear what's needed
   fputs("\x1b[2J", stdout);
   
-  Line *current = buf->head;
-  int i = 1;
-  
+    
   if(buf->cursor_row < win->hoffset){
     win->hoffset = buf->cursor_row;
   }else if(buf->cursor_row >= win->hoffset + win->height){
@@ -34,26 +32,36 @@ void render(Buffer *buf, Window *win)
   }
 
   if(win->woffset < 0) win->woffset = 0;
+  
+  Line *current = buf->head;
+  //EDITS START HERE#########
+  int i = 0;
+  int printed_lines = 0;
 
-  while(current != NULL){
+  while(current != NULL && printed_lines < win->height){
     if(i < win->hoffset){
       current = current->next;
       i++;
       continue;
     }
-
-    if(i > win->hoffset + win->height){
-      break;
-    }
     
-    if(win->woffset > current->len){
-      printf("\n");
+    printf("\x1b[%d;1H", printed_lines + 1);
+
+    if(win->woffset < current->len){
+      int available = current->len - win->woffset;
+      int to_print = (available < win->width) ? available : win->width;
+      printf("%.*s", to_print, &current->data[win->woffset]);
+    }
+
+    if(printed_lines < win->height - 1){
+      printf("\x1b[K\n");
     }else{
-      printf("%.*s\n", win->width, &current->data[win->woffset]);
+      printf("\x1b[K");
     }
 
     current = current->next;
     i++;
+    printed_lines++;
   }
   
   // [?25h -- This shows the cursor

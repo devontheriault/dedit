@@ -76,7 +76,7 @@ void buffer_delete_line(Buffer *buf)
 void buffer_insert_char(Buffer *buf, char c)
 {
   Line *current_line = buf->cursor_line;
-  if(current_line->len > current_line->capacity){
+  if(current_line->len + 1 >= current_line->capacity){
     buffer_increase_capacity(buf);
   }
 
@@ -104,7 +104,6 @@ void buffer_delete_char(Buffer *buf)
             current_line->len - buf->cursor_col);
     buf->cursor_col--;
     current_line->len--;
-    //buf->line_count--;
     current_line->data[current_line->len] = '\0';
   }
 }
